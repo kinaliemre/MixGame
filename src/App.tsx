@@ -4,8 +4,8 @@ import {
   type GameSnapshot,
   createInitialSnapshot,
   getOpeningStatusLabel,
+  getTileImage,
   getTileLabel,
-  getTileStyle,
   ruleHighlights,
   upcomingGames,
 } from './lib/o101'
@@ -96,10 +96,24 @@ function App() {
             </button>
             <div className="hero-stat">
               <span>Gosterge</span>
+              {getTileImage(snapshot.indicator) ? (
+                <img
+                  className="hero-stat__tile"
+                  src={getTileImage(snapshot.indicator) ?? undefined}
+                  alt={snapshot.indicatorLabel}
+                />
+              ) : null}
               <strong>{snapshot.indicatorLabel}</strong>
             </div>
             <div className="hero-stat">
               <span>Okey</span>
+              {getTileImage(snapshot.okeyTile) ? (
+                <img
+                  className="hero-stat__tile"
+                  src={getTileImage(snapshot.okeyTile) ?? undefined}
+                  alt={snapshot.okeyLabel}
+                />
+              ) : null}
               <strong>{snapshot.okeyLabel}</strong>
             </div>
           </div>
@@ -150,12 +164,23 @@ function App() {
                   </div>
 
                   <div className="tile-rack">
-                    {player.tiles.map((tile) => (
-                      <div className="tile" key={tile.id} style={getTileStyle(tile)}>
-                        <span className="tile-value">{getTileLabel(tile)}</span>
-                        <span className="tile-color">{tile.color}</span>
-                      </div>
-                    ))}
+                    {player.tiles.map((tile) => {
+                      const tileImage = getTileImage(tile)
+
+                      return (
+                        <div className="tile" key={tile.id}>
+                          {tileImage ? (
+                            <img
+                              className="tile-image"
+                              src={tileImage}
+                              alt={getTileLabel(tile)}
+                            />
+                          ) : (
+                            <span className="tile-fallback">{getTileLabel(tile)}</span>
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
 
                   <div className="combo-list">

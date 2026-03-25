@@ -28,6 +28,7 @@ export type Player = {
 export type GameSnapshot = {
   indicator: Tile
   indicatorLabel: string
+  okeyTile: Tile
   okeyLabel: string
   activePlayerId: string
   players: Player[]
@@ -70,6 +71,11 @@ export const ruleHighlights = [
 ]
 
 const playerNames = ['Sen', 'Bilgisayar 1', 'Bilgisayar 2', 'Bilgisayar 3']
+
+const tileImages = import.meta.glob('../assets/tiles/*.png', {
+  eager: true,
+  import: 'default',
+}) as Record<string, string>
 
 function shuffle<T>(items: T[]) {
   const copy = [...items]
@@ -144,6 +150,24 @@ export function getTileStyle(tile: Tile) {
   }
 
   return palette[tile.color]
+}
+
+export function getTileImage(tile: Tile) {
+  if (tile.fakeJoker) {
+    const jokerVariant = tile.id.endsWith('2') ? '2' : '1'
+    return tileImages[`../assets/tiles/title_joker_${jokerVariant}.png`] ?? null
+  }
+
+  const colorMap: Record<TileColor, string> = {
+    Kirmizi: 'red',
+    Mavi: 'blue',
+    Siyah: 'black',
+    Sari: 'green',
+  }
+
+  return tileImages[
+    `../assets/tiles/title_${colorMap[tile.color]}_${tile.number}.png`
+  ] ?? null
 }
 
 function sortTiles(tiles: Tile[]) {
@@ -280,6 +304,11 @@ export function createInitialSnapshot(): GameSnapshot {
   return {
     indicator,
     indicatorLabel: getTileLabel(indicator),
+    okeyTile: {
+      id: `okey-${okey.color}-${okey.number}`,
+      number: okey.number,
+      color: okey.color,
+    },
     okeyLabel: `${okey.color} ${okey.number}`,
     activePlayerId: players[1]?.id ?? players[0].id,
     players,
