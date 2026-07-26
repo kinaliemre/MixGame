@@ -32,6 +32,9 @@ export type GameSnapshot = {
   okeyLabel: string
   activePlayerId: string
   players: Player[]
+  drawPile: Tile[]
+  discardPile: Tile[]
+  initialDiscardOwnerIndex: number | null
 }
 
 export const colors: TileColor[] = ['Kirmizi', 'Mavi', 'Siyah', 'Sari']
@@ -246,7 +249,7 @@ function findSetCombos(tiles: Tile[]) {
     }))
 }
 
-function analyzeHand(tiles: Tile[]) {
+export function analyzeHand(tiles: Tile[]) {
   const combos = [...findRunCombos(tiles), ...findSetCombos(tiles)].sort(
     (left, right) => right.total - left.total,
   )
@@ -281,6 +284,8 @@ export function getOpeningStatusLabel(canOpen: boolean) {
 export function createInitialSnapshot(): GameSnapshot {
   const deck = buildDeck()
   const indicator = deck.pop()
+  const dealerIndex = 0
+  const firstDiscarderIndex = playerNames.length - 1
 
   if (!indicator) {
     throw new Error('Gosterge tasi olusturulamadi.')
@@ -289,17 +294,30 @@ export function createInitialSnapshot(): GameSnapshot {
   const okey = getNextTile(indicator)
 
   const players = playerNames.map((name, index) => {
-    const tileCount = index === 0 ? 15 : 14
+    const tileCount = index === firstDiscarderIndex ? 22 : 21
     const tiles = sortTiles(deck.splice(0, tileCount))
 
     return {
       id: `player-${index + 1}`,
       name,
-      isDealer: index === 0,
+      isDealer: index === dealerIndex,
       tiles,
       analysis: analyzeHand(tiles),
     }
   })
+
+  const firstDiscarder = players[firstDiscarderIndex]
+  const firstDiscardIndex =
+    firstDiscarder.tiles.length > 0
+      ? Math.floor(Math.random() * firstDiscarder.tiles.length)
+      : -1
+  const firstDiscard =
+    firstDiscardIndex >= 0 ? firstDiscarder.tiles.splice(firstDiscardIndex, 1)[0] : null
+
+  if (firstDiscard) {
+    firstDiscarder.tiles = sortTiles(firstDiscarder.tiles)
+    firstDiscarder.analysis = analyzeHand(firstDiscarder.tiles)
+  }
 
   return {
     indicator,
@@ -310,7 +328,10 @@ export function createInitialSnapshot(): GameSnapshot {
       color: okey.color,
     },
     okeyLabel: `${okey.color} ${okey.number}`,
-    activePlayerId: players[1]?.id ?? players[0].id,
+    activePlayerId: players[0].id,
     players,
+    drawPile: deck,
+    discardPile: firstDiscard ? [firstDiscard] : [],
+    initialDiscardOwnerIndex: firstDiscard ? firstDiscarderIndex : null,
   }
 }
