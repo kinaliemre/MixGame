@@ -410,20 +410,23 @@
 }
 
 .player-rack--bottom .player-discard {
-  right: -70px;
-  bottom: 20px;
+  right: -62px;
+  bottom: 14px;
 }
 
 .player-rack--top .player-discard {
-  right: -70px;
-  top: 20px;
+  left: -346px;
+  top: 86px;
 }
 
-.player-rack--left .player-discard,
+.player-rack--left .player-discard {
+  left: 94px;
+  top: calc(100% + 74px);
+}
+
 .player-rack--right .player-discard {
-  right: -38px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: -206px;
+  top: -226px;
 }
 
 .player-rack--left .opponent-rack-line,
@@ -591,6 +594,11 @@
   .center-tile img {
     width: 44px;
     height: 62px;
+  }
+
+  .player-discard {
+    width: 46px;
+    height: 64px;
   }
 
   .rack-label {

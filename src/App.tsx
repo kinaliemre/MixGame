@@ -163,7 +163,7 @@ function playComputerTurns(
 }
 
 function App() {
-  const [{ snapshot, myRackSlots, discardOwners, turnPhase, message }, setRoundState] =
+  const [{ snapshot, myRackSlots, discardOwners, turnPhase }, setRoundState] =
     useState<RoundState>(() => createRoundState())
   const [draggedSlotIndex, setDraggedSlotIndex] = useState<number | null>(null)
   const [roundKey, setRoundKey] = useState(0)
@@ -344,11 +344,7 @@ function App() {
       <section className="table-wrap" aria-label="101 oyun masasi">
         <div className="table-felt" key={roundKey}>
           <div className="guide-panel">
-            <strong>{message}</strong>
-            <span>
-              Tas al: kapali desteye veya oyuncunun attigi tasa tikla. Tas at:
-              elindeki tasi sagindaki atma alanina surukle.
-            </span>
+            <strong>Sira sende.</strong>
           </div>
 
           <div className="center-area">
@@ -465,7 +461,7 @@ function App() {
                 )}
 
                 <button
-                  className={`player-discard player-discard--${position} ${
+                  className={`player-discard player-discard--${position} player-discard--owner-${index} ${
                     playerDiscardTile ? 'has-tile' : ''
                   }`}
                   disabled={!canDraw && !(isMyRack && canDiscard)}
