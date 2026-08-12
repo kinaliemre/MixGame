@@ -173,6 +173,10 @@ export function getTileImage(tile: Tile) {
   ] ?? null
 }
 
+export function getIndicatorTileImage() {
+  return tileImages['../assets/tiles/title_joker_1.png'] ?? null
+}
+
 function sortTiles(tiles: Tile[]) {
   return [...tiles].sort((left, right) => {
     if (left.color === right.color) {
@@ -283,9 +287,8 @@ export function getOpeningStatusLabel(canOpen: boolean) {
 
 export function createInitialSnapshot(): GameSnapshot {
   const deck = buildDeck()
-  const indicator = deck.pop()
+  const indicator = deck.at(-1)
   const dealerIndex = 0
-  const firstDiscarderIndex = playerNames.length - 1
 
   if (!indicator) {
     throw new Error('Gosterge tasi olusturulamadi.')
@@ -294,7 +297,7 @@ export function createInitialSnapshot(): GameSnapshot {
   const okey = getNextTile(indicator)
 
   const players = playerNames.map((name, index) => {
-    const tileCount = index === firstDiscarderIndex ? 22 : 21
+    const tileCount = index === dealerIndex ? 22 : 21
     const tiles = sortTiles(deck.splice(0, tileCount))
 
     return {
@@ -305,19 +308,6 @@ export function createInitialSnapshot(): GameSnapshot {
       analysis: analyzeHand(tiles),
     }
   })
-
-  const firstDiscarder = players[firstDiscarderIndex]
-  const firstDiscardIndex =
-    firstDiscarder.tiles.length > 0
-      ? Math.floor(Math.random() * firstDiscarder.tiles.length)
-      : -1
-  const firstDiscard =
-    firstDiscardIndex >= 0 ? firstDiscarder.tiles.splice(firstDiscardIndex, 1)[0] : null
-
-  if (firstDiscard) {
-    firstDiscarder.tiles = sortTiles(firstDiscarder.tiles)
-    firstDiscarder.analysis = analyzeHand(firstDiscarder.tiles)
-  }
 
   return {
     indicator,
@@ -331,7 +321,7 @@ export function createInitialSnapshot(): GameSnapshot {
     activePlayerId: players[0].id,
     players,
     drawPile: deck,
-    discardPile: firstDiscard ? [firstDiscard] : [],
-    initialDiscardOwnerIndex: firstDiscard ? firstDiscarderIndex : null,
+    discardPile: [],
+    initialDiscardOwnerIndex: null,
   }
 }

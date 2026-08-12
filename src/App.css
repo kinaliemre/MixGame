@@ -79,13 +79,13 @@
 
 .center-area {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  right: 40px;
+  top: 32px;
+  z-index: 8;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  transform: translate(-50%, -50%);
+  gap: 12px;
 }
 
 .guide-panel {
@@ -111,8 +111,8 @@
 
 .tile-stack {
   position: relative;
-  width: 92px;
-  height: 116px;
+  width: 72px;
+  height: 92px;
 }
 
 .pile-button {
@@ -131,9 +131,9 @@
 .pile-button > strong {
   position: absolute;
   left: 50%;
-  bottom: -30px;
+  bottom: -24px;
   width: 100px;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   transform: translateX(-50%);
 }
 
@@ -160,10 +160,9 @@
   transform: translate(12px, -7px) rotate(10deg);
 }
 
-.stack-card.top::after {
-  content: "101";
+.draw-pile-count {
   color: #164b32;
-  font-size: 1.65rem;
+  font-size: 1.35rem;
   font-weight: 900;
 }
 
@@ -171,8 +170,8 @@
   display: grid;
   justify-items: center;
   gap: 6px;
-  min-width: 94px;
-  padding: 10px;
+  min-width: 78px;
+  padding: 8px;
   border: 1px solid rgba(255, 244, 213, 0.22);
   border-radius: 8px;
   background: rgba(10, 43, 28, 0.76);
@@ -194,13 +193,13 @@
 }
 
 .center-tile img {
-  width: 52px;
-  height: 72px;
+  width: 42px;
+  height: 58px;
   object-fit: contain;
 }
 
 .center-tile strong {
-  font-size: 0.88rem;
+  font-size: 0.76rem;
 }
 
 .player-rack {
@@ -259,6 +258,33 @@
   font-size: 1rem;
 }
 
+.rack-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hand-value-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 6px;
+  color: #2d1f12;
+  background: #f3c07a;
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.hand-value-pill.success {
+  background: #badf9f;
+}
+
+.hand-value-pill.warning {
+  background: #f3c07a;
+}
+
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -299,6 +325,37 @@
   box-shadow:
     inset 0 0 0 2px rgba(255, 223, 162, 0.14),
     0 12px 26px rgba(0, 0, 0, 0.24);
+}
+
+.my-rack-area {
+  position: relative;
+}
+
+.rack-sort-actions {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  display: grid;
+  gap: 8px;
+  transform: translateY(-50%);
+}
+
+.rack-sort-actions button {
+  min-width: 64px;
+  min-height: 36px;
+  border: 1px solid rgba(255, 244, 213, 0.28);
+  border-radius: 8px;
+  color: #2e1a0f;
+  background: #f0c76e;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.rack-sort-actions button:hover {
+  background: #ffd98a;
 }
 
 .player-rack--bottom .rack-board {
@@ -436,6 +493,83 @@
   justify-self: center;
 }
 
+.opened-melds {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  width: 420px;
+  pointer-events: none;
+}
+
+.opened-group {
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid rgba(255, 244, 213, 0.12);
+  border-radius: 7px;
+  background: rgba(8, 48, 30, 0.42);
+}
+
+.opened-tile {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 42px;
+}
+
+.opened-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.22));
+}
+
+.opened-tile span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  border-radius: 4px;
+  color: #21160d;
+  background: #f7efe0;
+  font-size: 0.5rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.player-rack--bottom .opened-melds {
+  left: 50%;
+  bottom: calc(100% + 26px);
+  justify-content: center;
+  width: min(760px, 92vw);
+  transform: translateX(-50%);
+}
+
+.player-rack--top .opened-melds {
+  left: 50%;
+  top: 74px;
+  justify-content: center;
+  transform: translateX(-50%);
+}
+
+.player-rack--left .opened-melds {
+  left: calc(100% + 58px);
+  top: 50%;
+  width: 340px;
+  transform: translateY(-50%);
+}
+
+.player-rack--right .opened-melds {
+  right: calc(100% + 58px);
+  top: 50%;
+  justify-content: flex-end;
+  width: 340px;
+  transform: translateY(-50%);
+}
+
 .tile {
   border: 0;
   background: transparent;
@@ -489,6 +623,50 @@
   font-size: 0.72rem;
   font-weight: 800;
   text-align: center;
+}
+
+.tile .okey-back,
+.opened-tile .okey-back {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(46, 31, 18, 0.22);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, #fffaf0, #e8ddc9);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.52),
+    inset 0 -8px 16px rgba(92, 68, 38, 0.12);
+}
+
+.opened-tile--okey {
+  outline: 1px solid rgba(240, 199, 110, 0.5);
+  outline-offset: 2px;
+  border-radius: 5px;
+}
+
+.return-tile-button {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  z-index: 3;
+  width: calc(100% - 6px);
+  min-height: 18px;
+  padding: 0 2px;
+  border: 1px solid rgba(45, 31, 18, 0.34);
+  border-radius: 5px;
+  color: #2d1f12;
+  background: #f0c76e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24);
+  font: inherit;
+  font-size: 0.48rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.return-tile-button:hover {
+  background: #ffd98a;
 }
 
 @media (max-width: 980px) {
@@ -545,9 +723,27 @@
     grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
+  .rack-sort-actions {
+    right: auto;
+    left: 0;
+    top: -48px;
+    grid-template-columns: repeat(2, auto);
+    transform: none;
+  }
+
   .center-area {
-    top: 50%;
+    right: 22px;
+    top: 28px;
     gap: 10px;
+  }
+
+  .opened-melds {
+    width: 300px;
+  }
+
+  .opened-tile {
+    width: 24px;
+    height: 34px;
   }
 }
 
@@ -578,8 +774,10 @@
   }
 
   .center-area {
+    right: 16px;
+    top: 78px;
     flex-wrap: wrap;
-    width: 230px;
+    width: 190px;
   }
 
   .tile-stack {
@@ -596,9 +794,21 @@
     height: 62px;
   }
 
+  .opened-melds {
+    max-width: 220px;
+  }
+
+  .player-rack--bottom .opened-melds {
+    bottom: calc(100% + 18px);
+  }
+
   .player-discard {
     width: 46px;
     height: 64px;
+  }
+
+  .rack-sort-actions {
+    top: -86px;
   }
 
   .rack-label {
